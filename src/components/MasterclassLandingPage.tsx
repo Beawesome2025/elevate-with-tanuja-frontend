@@ -139,12 +139,6 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
   }
 
   // ─── Main Page ────────────────────────────────────────────────────────────────
-
-  export default function MasterclassLandingPage() {
-    // In production with Next.js App Router, fetch data server-side:
-    // const data = await getMasterclassData();
-    const data = mockData;
-
     return (
       <main
         className="min-h-screen"
