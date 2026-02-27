@@ -12,6 +12,11 @@ const nextConfig = {
         hostname: 'localhost',
         port: '1337',
       },
+      {
+        protocol: 'https',
+        hostname: 'elevate-with-tanuja-backend.onrender.com',
+        pathname: '/uploads/**',
+      },
     ],
   },
 };
