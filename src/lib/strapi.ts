@@ -45,7 +45,8 @@ export async function getMasterclassData(): Promise<MasterclassData | null> {
     });
 
     if (!response.ok) {
-      console.error("Strapi fetch failed:", response.statusText);
+      const errorBody = await response.text(); // Get the actual error from Strapi
+      console.error(`Strapi fetch failed (${response.status}):`, errorBody);
       return null;
     }
 
