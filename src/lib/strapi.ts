@@ -38,8 +38,11 @@ export async function getMasterclassData(): Promise<MasterclassData | null> {
     const response = await fetch(`${STRAPI_URL}/api/masterclasses?${query}`, {
       headers: {
         Authorization: `Bearer ${STRAPI_TOKEN}`,
+        // This header is a lifesaver: It tells Strapi 5 to use the v4 data structure
+        // Remove this later once you are comfortable with Strapi 5's flattened format
+        "Strapi-Response-Format": "v4",
       },
-      next: { revalidate: 0 }, // Set to 0 temporarily to disable caching while debugging
+      next: { revalidate: 0 },
     });
 
     if (!response.ok) {
@@ -50,16 +53,16 @@ export async function getMasterclassData(): Promise<MasterclassData | null> {
 
     const json = await response.json();
 
-    // 1. Log the data to your terminal so you can see the real structure
-    console.log("DEBUG: Strapi Response Data Length:", json.data?.length);
-
-    if (!json.data || json.data.length === 0) {
-      console.warn("DEBUG: No data returned from Strapi. Is the entry Published?");
+    // Check if we have data
+    if (!json.data || (Array.isArray(json.data) && json.data.length === 0)) {
+      console.warn("No data found at /api/masterclasses. Check Publish status.");
       return null;
     }
 
-    // 2. Strapi 5 often flattens the response
-    const item = json.data[0];
+    const item = Array.isArray(json.data) ? json.data[0] : json.data;
+
+    // With the "v4" header above, 'attributes' will exist.
+    // Without it, 'a' will just be 'item'.
     const a = item.attributes || item;
 
     const resolveMedia = (path: string | undefined | null): string | null => {
@@ -68,7 +71,6 @@ export async function getMasterclassData(): Promise<MasterclassData | null> {
       return `${STRAPI_URL}${path}`;
     };
 
-    // 3. Robust Mapping (Checking for deep nesting)
     return {
       id: item.id,
       programName: a.programName,
@@ -81,14 +83,13 @@ export async function getMasterclassData(): Promise<MasterclassData | null> {
       hostName: a.hostName,
       hostBio: a.hostBio ?? "",
       hostPhotoUrl: resolveMedia(
-        a.hostPhoto?.url || a.hostPhoto?.data?.attributes?.url
+        a.hostPhoto?.data?.attributes?.url || a.hostPhoto?.url
       ),
-      // Fix for Pain Points/Outcomes
-      painPoints: (a.painPoints ?? []).map((p: any) => (typeof p === 'object' ? p.text : p)),
-      outcomes: (a.outcomes ?? []).map((o: any) => (typeof o === 'object' ? o.text : o)),
+      painPoints: (a.painPoints ?? []).map((p: any) => p.text || p),
+      outcomes: (a.outcomes ?? []).map((o: any) => o.text || o),
       faqs: (a.faqs ?? []).map((f: any) => ({
-        question: f.question || "",
-        answer: f.answer || "",
+        question: f.question,
+        answer: f.answer,
       })),
       ctaLabel: a.ctaLabel ?? "Reserve Your Seat",
       checkoutUrl: a.checkoutUrl,
@@ -96,7 +97,7 @@ export async function getMasterclassData(): Promise<MasterclassData | null> {
       seoDescription: a.seoDescription,
     };
   } catch (error) {
-    console.error("Error fetching Masterclass data:", error);
+    console.error("Error in getMasterclassData:", error);
     return null;
   }
 }
