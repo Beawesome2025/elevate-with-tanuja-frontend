@@ -32,8 +32,10 @@ const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
 const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
 
 export async function getMasterclassData(): Promise<MasterclassData | null> {
-  const query = "populate[hostPhoto]=*&populate[painPoints]=*&populate[outcomes]=*&populate[faqs]=*";
-
+  const query = "populate=*";
+  console.log("--- START DEBUG ---");
+  console.log("URL:", STRAPI_URL);
+  console.log("TOKEN EXISTS:", !!STRAPI_TOKEN);
   try {
     const response = await fetch(`${STRAPI_URL}/api/masterclasses?${query}`, {
       headers: {
@@ -83,13 +85,14 @@ export async function getMasterclassData(): Promise<MasterclassData | null> {
       hostName: a.hostName,
       hostBio: a.hostBio ?? "",
       hostPhotoUrl: resolveMedia(
-        a.hostPhoto?.data?.attributes?.url || a.hostPhoto?.url
+        a.hostPhoto?.url || a.hostPhoto?.data?.attributes?.url
       ),
-      painPoints: (a.painPoints ?? []).map((p: any) => p.text || p),
-      outcomes: (a.outcomes ?? []).map((o: any) => o.text || o),
+      // Updated mapping to handle both Strapi 5 Component objects and raw strings
+      painPoints: (a.painPoints ?? []).map((p: any) => (typeof p === 'object' ? p.text : p)),
+      outcomes: (a.outcomes ?? []).map((o: any) => (typeof o === 'object' ? o.text : o)),
       faqs: (a.faqs ?? []).map((f: any) => ({
-        question: f.question,
-        answer: f.answer,
+        question: f.question || "",
+        answer: f.answer || "",
       })),
       ctaLabel: a.ctaLabel ?? "Reserve Your Seat",
       checkoutUrl: a.checkoutUrl,

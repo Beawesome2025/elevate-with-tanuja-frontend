@@ -462,25 +462,35 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
             {/* Photo placeholder */}
             <div className="relative">
-              <div className="aspect-[4/5] bg-[#1A0A0A] border border-[#2A1A1A] relative overflow-hidden">
-                {/* Replace with actual Next.js Image component */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-24 h-24 rounded-full bg-[#2A1A1A] border border-[#C9A84C]/30 mx-auto mb-4 flex items-center justify-center">
-                      <Users size={32} className="text-[#C9A84C]/40" />
-                    </div>
-                    <p className="body-font text-xs text-[#8B7355] tracking-wide">
-                      Host Photo
-                    </p>
-                  </div>
-                </div>
-                {/* Decorative corner */}
-                <div className="absolute top-4 left-4 w-12 h-12 border-t border-l border-[#C9A84C]/50" />
-                <div className="absolute bottom-4 right-4 w-12 h-12 border-b border-r border-[#C9A84C]/50" />
-              </div>
-              {/* Offset accent block */}
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-[#C9A84C]/10 border border-[#C9A84C]/20" />
+    <div className="aspect-[4/5] bg-[#1A0A0A] border border-[#2A1A1A] relative overflow-hidden">
+      {data.hostPhotoUrl ? (
+        <img
+          src={data.hostPhotoUrl}
+          alt={data.hostName}
+          className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+        />
+      ) : (
+        /* Fallback if no photo is uploaded */
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-24 h-24 rounded-full bg-[#2A1A1A] border border-[#C9A84C]/30 mx-auto mb-4 flex items-center justify-center">
+              <Users size={32} className="text-[#C9A84C]/40" />
             </div>
+            <p className="body-font text-xs text-[#8B7355] tracking-wide">
+              Host Photo
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Decorative corner lines - keep these for the aesthetic */}
+      <div className="absolute top-4 left-4 w-12 h-12 border-t border-l border-[#C9A84C]/50" />
+      <div className="absolute bottom-4 right-4 w-12 h-12 border-b border-r border-[#C9A84C]/50" />
+    </div>
+
+    {/* Offset accent block */}
+    <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-[#C9A84C]/10 border border-[#C9A84C]/20 -z-10" />
+  </div>
 
             {/* Bio */}
             <div>
