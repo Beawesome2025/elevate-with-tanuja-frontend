@@ -77,11 +77,6 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
       {/* Main Hero Content */}
       <section className="max-w-7xl mx-auto px-6 py-0 grid lg:grid-cols-2 gap-4 lg:gap-12 items-center min-h-[50vh] md:min-h-[55vh]">
         <div className="flex flex-col justify-center py-2 min-w-0">
-          {/* RESPONSIVE FIX:
-              - whitespace-normal (default) allows breaking on mobile.
-              - md:whitespace-nowrap forces single line on laptops.
-              - Responsive font sizing adjusted for both states.
-          */}
           <h2 className="text-[1.85rem] sm:text-4xl md:text-5xl lg:text-5xl font-bold leading-[1.2] md:leading-tight mb-4 font-serif md:whitespace-nowrap overflow-visible">
             {data.programName}
           </h2>
@@ -128,11 +123,11 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
         </div>
       </section>
 
-      {/* Is This For You Section */}
+      {/* Is This For You Section - UPDATED TEXTS */}
       <section className="py-16 md:py-24 bg-white border-y border-gray-100">
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <SectionLabel>Is this for you?</SectionLabel>
-          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-12 md:mb-16">Recognize yourself?</h2>
+          <SectionLabel>Recognize yourself?</SectionLabel>
+          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-12 md:mb-16">This Masterclass is for you if...</h2>
           <div className="grid md:grid-cols-2 gap-6 md:gap-8 text-left">
             {data.painPoints.map((point, i) => (
               <div key={i} className="flex gap-4 md:gap-6 p-6 md:p-8 bg-[#FFF5F0] border-l-4 border-[#FF7F2E] items-start">
