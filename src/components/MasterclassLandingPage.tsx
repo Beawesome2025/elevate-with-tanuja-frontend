@@ -76,16 +76,20 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
 
       {/* Main Hero Content */}
       <section className="max-w-7xl mx-auto px-6 py-0 grid lg:grid-cols-2 gap-4 lg:gap-12 items-center min-h-[50vh] md:min-h-[55vh]">
-        <div className="flex flex-col justify-center py-2 overflow-hidden">
-          {/* MOBILE FIX: fluid font size using clamp to prevent "Blueprint" from cutting off */}
-          <h2 className="text-[clamp(1.75rem,7vw,3.5rem)] font-bold leading-tight mb-4 font-serif whitespace-nowrap">
+        <div className="flex flex-col justify-center py-2 min-w-0">
+          {/* RESPONSIVE FIX:
+              - whitespace-normal (default) allows breaking on mobile.
+              - md:whitespace-nowrap forces single line on laptops.
+              - Responsive font sizing adjusted for both states.
+          */}
+          <h2 className="text-[1.85rem] sm:text-4xl md:text-5xl lg:text-5xl font-bold leading-[1.2] md:leading-tight mb-4 font-serif md:whitespace-nowrap overflow-visible">
             {data.programName}
           </h2>
+
           <p className="text-base md:text-lg text-gray-600 mb-6 max-w-xl leading-relaxed">
             {data.tagline}
           </p>
 
-          {/* MOBILE FIX: items-center and flexible gap to prevent "Women Only" cutoff */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-3 mb-8 text-[11px] md:text-sm font-semibold text-gray-700">
             <div className="flex items-center gap-2 shrink-0"><Calendar size={16} className="text-[#FF7F2E]"/> {data.date}</div>
             <div className="flex items-center gap-2 shrink-0"><Clock size={16} className="text-[#FF7F2E]"/> {data.time} IST</div>
@@ -106,7 +110,6 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
             className="w-full h-auto max-h-[45vh] lg:max-h-[52vh] object-contain object-bottom mb-2 pointer-events-none"
           />
 
-          {/* Highlight Cards - Adjusted for Mobile Viewport */}
           <div className="grid grid-cols-2 gap-2 md:gap-3 w-full pb-4">
             {[
               { icon: <Mic size={20} />, label: "Command Every Room" },
