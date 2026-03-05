@@ -173,25 +173,42 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16 md:py-24 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <SectionLabel>Testimonials</SectionLabel>
-          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-12 md:mb-16">See What Other People Have To Say About Tanuja</h2>
-          <div className="grid gap-6 text-left">
-            {[
-              { text: "Working with Tanuja has been one of the most rewarding experiences of my professional journey. She brought warmth, clarity, and genuine care... Her coaching helped me gain confidence in my own decision-making.", author: "Divya AS - Associate Director" },
-              { text: "You are very organised, caring and a matured coach. You understand the depth of the problem and give the right solutions...", author: "Vrinda - Team Lead" },
-              { text: "Working with her has been a game-changer for me. She’s dedicated, knowledgeable...", author: "Pragathe Murugan - Founder and CEO" }
-            ].map((t, i) => (
-              <div key={i} className="bg-white p-8 md:p-10 shadow-sm border border-gray-100 italic">
-                <p className="text-base md:text-lg text-gray-700 mb-4 leading-relaxed">"{t.text}"</p>
-                <p className="font-bold text-[#FF7F2E] not-italic text-sm md:text-base">— {t.author}</p>
-              </div>
-            ))}
+      {/* Testimonials - Full Text Updated */}
+        <section className="py-24 bg-gray-50">
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <SectionLabel>Testimonials</SectionLabel>
+              <h2 className="text-4xl font-bold font-serif">See What Other People Have To Say About Tanuja</h2>
+            </div>
+            <div className="grid gap-10">
+              {[
+                {
+                  text: "Working with Tanuja has been one of the most rewarding experiences of my professional journey. From the very first conversation, she brought warmth, clarity, and genuine care into the coaching process. What stood out most to me was her ability to listen deeply and ask the kind of questions that made me pause, reflect, and discover insights I hadn’t considered before. Tanuja has a gift for creating a safe space where you feel both supported and challenged. She doesn’t just guide you, she walks alongside you, celebrating small wins and encouraging you through the tougher moments. Her coaching helped me not only achieve my goals but also gain confidence in my own decision-making and leadership style.",
+                  author: "Divya AS - Associate Director"
+                },
+                {
+                  text: "Thank you for your time and support in this journey. It was very helpful for me as I realized lot of hidden strengths within me and gained more confidence to tackle things. You are very organised, caring and a matured coach. You understand the depth of the problem and give the right solutions to the problems. Your knowledge and talent will help lot of people and I would definitely recommend this course to my contacts.",
+                  author: "Vrinda - Team Lead"
+                },
+                {
+                  text: "I had the opportunity to work with Tanuja for a personalized consultation, and I’m so glad I did. From the start, she took the time to understand what I needed and offered tips and tricks that were customized just for me. Clearly, she knows exactly what she’s doing, and she made everything so easy to grasp. During our practical activities, I had several 'aha moments,' which were incredibly valuable. I’d definitely recommend Tanuja to anyone looking to improve their Self Image. She’s dedicated, knowledgeable, and really helps you build systems that work for you. Working with her has been a game-changer for me.",
+                  author: "Pragathe Murugan - Founder and CEO"
+                }
+              ].map((t, i) => (
+                <div key={i} className="bg-white p-10 shadow-sm border border-gray-100 relative group">
+                  {/* Decorative Quote Icon */}
+                  <span className="absolute top-4 left-4 text-7xl text-[#FF7F2E]/10 font-serif leading-none">“</span>
+                  <p className="text-lg text-gray-700 mb-6 italic leading-relaxed font-sans relative z-10">
+                    {t.text}
+                  </p>
+                  <p className="font-bold text-[#FF7F2E] uppercase tracking-widest text-sm not-italic">
+                    — {t.author}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* About The Host */}
       <section className="py-16 md:py-24 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
