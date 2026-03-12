@@ -21,26 +21,41 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-// --- REUSABLE COMPONENTS ---
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center justify-center gap-3 mb-4">
       <div className="h-px w-8 bg-[#FF7F2E]" />
-      <span className="text-[11px] uppercase tracking-[0.25em] font-semibold text-[#FF7F2E]">
-        {children}
-      </span>
+      <span className="text-[11px] uppercase tracking-[0.25em] font-semibold text-[#FF7F2E]">{children}</span>
       <div className="h-px w-8 bg-[#FF7F2E]" />
     </div>
   );
 }
 
-function CTAButton({ href, children, size = "default" }: { href: string; children: React.ReactNode; size?: "default" | "large" }) {
+// Updated CTAButton to handle the small suffix text
+function CTAButton({
+  href,
+  children,
+  price,
+  currency,
+  size = "default"
+}: {
+  href: string;
+  children: React.ReactNode;
+  price?: number;
+  currency?: string;
+  size?: "default" | "large"
+}) {
   return (
-    <a
-      href={href}
-      className={`inline-flex items-center justify-center gap-2 font-bold transition-all duration-300 bg-[#FF7F2E] hover:bg-[#E66A1F] text-white rounded-none uppercase tracking-widest shadow-lg ${size === "large" ? "px-10 py-4 text-base md:text-lg" : "px-8 py-4 text-sm"}`}
-    >
-      {children}
+    <a href={href} className={`inline-flex items-center justify-center gap-2 font-bold transition-all duration-300 bg-[#FF7F2E] hover:bg-[#E66A1F] text-white rounded-none uppercase tracking-widest shadow-lg ${size === "large" ? "px-10 py-4 text-base md:text-lg" : "px-8 py-4 text-sm"}`}>
+      <span className="flex items-baseline gap-1">
+        {children}
+        {price !== undefined && (
+          <>
+            <span> · {currency}{price}</span>
+            <span className="text-[10px] md:text-[12px] lowercase font-normal opacity-90 tracking-normal">+taxes</span>
+          </>
+        )}
+      </span>
       <ArrowRight size={size === "large" ? 22 : 16} />
     </a>
   );
@@ -57,54 +72,36 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
         .font-sans { font-family: 'Inter', sans-serif; }
       `}</style>
 
-      {/* Hero Header */}
       <header className="pt-6 pb-2 text-center px-4">
-        <h1 className="text-sm md:text-lg font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] mb-3 text-gray-800 leading-tight">
+        <h1 className="text-lg md:text-2xl font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] mb-3 text-gray-800 leading-tight">
           Online Masterclass for Working Women Professionals
         </h1>
-
         <div className="inline-block bg-[#FF7F2E] px-4 md:px-6 py-1.5 mb-3">
-          <span className="font-sans text-[10px] md:text-xs font-bold uppercase tracking-widest text-white">
-            Live session : 2 hours
-          </span>
+          <span className="font-sans text-[10px] md:text-xs font-bold uppercase tracking-widest text-white">Live session : 2 hours</span>
         </div>
-
         <div className="block">
-          <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Elevate-image-hub-logo.jpeg" alt="Logo" className="h-12 md:h-16 mx-auto" />
+          <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Elevate-image-hub-logo.jpeg" alt="Logo" className="h-16 mx-auto" />
         </div>
       </header>
 
-      {/* Main Hero Content */}
+      {/* 1. Hero Section */}
       <section className="max-w-7xl mx-auto px-6 py-0 grid lg:grid-cols-2 gap-4 lg:gap-12 items-center min-h-[50vh] md:min-h-[55vh]">
         <div className="flex flex-col justify-center py-2 min-w-0">
-          <h2 className="text-[1.85rem] sm:text-4xl md:text-5xl lg:text-5xl font-bold leading-[1.2] md:leading-tight mb-4 font-serif md:whitespace-nowrap overflow-visible">
+          <h2 className="text-[1.85rem] sm:text-4xl md:text-5xl lg:text-5xl font-bold leading-[1.2] md:leading-tight mb-4 font-serif md:whitespace-nowrap">
             {data.programName}
           </h2>
-
-          <p className="text-base md:text-lg text-gray-600 mb-6 max-w-xl leading-relaxed">
-            {data.tagline}
-          </p>
-
+          <p className="text-base md:text-lg text-gray-600 mb-6 max-w-xl leading-relaxed">{data.tagline}</p>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-3 mb-8 text-[11px] md:text-sm font-semibold text-gray-700">
             <div className="flex items-center gap-2 shrink-0"><Calendar size={16} className="text-[#FF7F2E]"/> {data.date}</div>
             <div className="flex items-center gap-2 shrink-0"><Clock size={16} className="text-[#FF7F2E]"/> {data.time} IST</div>
             <div className="flex items-center gap-2 shrink-0"><Users size={16} className="text-[#FF7F2E]"/> Women Only</div>
           </div>
-
-          <div className="flex">
-            <CTAButton href={data.checkoutUrl} size="large">
-              {data.ctaLabel} · {data.currency}{data.price}
-            </CTAButton>
-          </div>
+          <CTAButton href={data.checkoutUrl} size="large" price={data.price} currency={data.currency}>
+            {data.ctaLabel}
+          </CTAButton>
         </div>
-
         <div className="relative flex flex-col justify-end items-center lg:items-end w-full">
-          <img
-            src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Hero%20Pic.avif"
-            alt="Hero"
-            className="w-full h-auto max-h-[45vh] lg:max-h-[52vh] object-contain object-bottom mb-2 pointer-events-none"
-          />
-
+          <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Hero%20Pic.avif" alt="Hero" className="w-full h-auto max-h-[45vh] lg:max-h-[52vh] object-contain object-bottom mb-2" />
           <div className="grid grid-cols-2 gap-2 md:gap-3 w-full pb-4">
             {[
               { icon: <Mic size={20} />, label: "Command Every Room" },
@@ -114,16 +111,34 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
             ].map((item, i) => (
               <div key={i} className="bg-[#FFF5F0] p-3 md:p-4 border border-[#FF7F2E]/20 flex items-center gap-2 md:gap-3">
                 <div className="text-[#FF7F2E] flex-shrink-0">{item.icon}</div>
-                <span className="font-sans font-bold text-[8px] md:text-[10px] uppercase tracking-wider leading-tight">
-                  {item.label}
-                </span>
+                <span className="font-sans font-bold text-[8px] md:text-[10px] uppercase tracking-wider leading-tight">{item.label}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Is This For You Section - UPDATED TEXTS */}
+      {/* 2. About The Host (Pushed Up) */}
+      <section className="py-16 md:py-24 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+        <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Profile%20Pic.avif" alt="Host" className="w-full h-auto shadow-xl" />
+        <div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 font-serif">{data.hostName}</h2>
+          <div className="mb-6 md:mb-8">
+            <p className="text-xl font-bold text-[#FF7F2E] mb-1">Executive Presence Coach for Women Leaders</p>
+            <p className="text-base md:text-lg text-gray-500 font-sans">Helping Women Leaders build Confidence, Visibility & Career Growth</p>
+          </div>
+          <div className="space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed font-sans text-gray-700">
+            <p>Certified Life Coach – Life By Design (Puja Puneet)<br />Certified Image Consultant – Image Consulting Business Institute (ICBI)<br />Certified in Soft Skills & Train the Trainer – Scottish Qualifications Authority (SQA) & NABET</p>
+            <p>Tanuja works with women managers and aspiring leaders who are technically strong yet often overlooked in high-stakes conversations and growth opportunities. Through a structured approach focused on executive presence, leadership communication, and self-image, she enables women to command respect, articulate value, and position themselves for advancement.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 md:gap-8 pt-8 md:pt-10 border-t border-gray-100 mt-8 text-[#FF7F2E] font-bold">
+            <div><p className="text-3xl md:text-4xl mb-1">13 Years</p><p className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-gray-400">Corporate Experience</p></div>
+            <div><p className="text-3xl md:text-4xl mb-1">8 Years</p><p className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-gray-400">Coaching Experience</p></div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Recognize Yourself Section */}
       <section className="py-16 md:py-24 bg-white border-y border-gray-100">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <SectionLabel>Recognize yourself?</SectionLabel>
@@ -131,9 +146,7 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
           <div className="grid md:grid-cols-2 gap-6 md:gap-8 text-left">
             {data.painPoints.map((point, i) => (
               <div key={i} className="flex gap-4 md:gap-6 p-6 md:p-8 bg-[#FFF5F0] border-l-4 border-[#FF7F2E] items-start">
-                <div className="mt-1">
-                  <Star size={20} className="text-[#FF7F2E] fill-[#FF7F2E]" />
-                </div>
+                <Star size={20} className="text-[#FF7F2E] fill-[#FF7F2E] mt-1 shrink-0" />
                 <p className="text-base md:text-lg font-medium leading-relaxed font-sans">{point}</p>
               </div>
             ))}
@@ -141,31 +154,27 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
         </div>
       </section>
 
-      {/* Offline Seminar Glimpses */}
+      {/* 4. Offline Seminar Glimpses */}
       <section className="py-16 md:py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12 md:mb-16">
-            <SectionLabel>Our Community</SectionLabel>
-            <h2 className="text-3xl md:text-4xl font-bold font-serif">Glimpses from our Offline Seminar</h2>
-          </div>
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <SectionLabel>Our Community</SectionLabel>
+          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-12 md:mb-16">Glimpses from our Offline Seminar</h2>
           <div className="grid md:grid-cols-2 gap-6 md:gap-12">
-            <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Seminar-pic-1.avif" alt="Seminar 1" className="w-full h-auto shadow-lg" />
-            <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Seminar-Pic-2.avif" alt="Seminar 2" className="w-full h-auto shadow-lg" />
+            <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Seminar-pic-1.avif" alt="S1" className="shadow-lg" />
+            <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Seminar-Pic-2.avif" alt="S2" className="shadow-lg" />
           </div>
         </div>
       </section>
 
-      {/* Outcomes Section */}
+      {/* 5. Outcomes Section */}
       <section className="py-16 md:py-24 bg-[#FFF5F0]">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-12 md:mb-16">
-            <SectionLabel>The Transformation</SectionLabel>
-            <h2 className="text-3xl md:text-4xl font-bold font-serif">By the end of this masterclass, you will learn</h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-y-6 md:gap-y-8 gap-x-12">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <SectionLabel>The Transformation</SectionLabel>
+          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-12 md:mb-16">By the end of this masterclass, you will learn</h2>
+          <div className="grid md:grid-cols-2 gap-y-6 md:gap-y-8 gap-x-12 text-left">
             {data.outcomes.map((outcome, i) => (
               <div key={i} className="flex gap-4 items-start">
-                <CheckCircle2 size={22} className="text-[#FF7F2E] flex-shrink-0 mt-1" />
+                <CheckCircle2 size={22} className="text-[#FF7F2E] shrink-0 mt-1" />
                 <p className="text-base md:text-lg font-semibold font-sans text-gray-800 leading-snug">{outcome}</p>
               </div>
             ))}
@@ -173,114 +182,73 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
         </div>
       </section>
 
-      {/* Testimonials - Full Text Updated */}
-        <section className="py-24 bg-gray-50">
-          <div className="max-w-5xl mx-auto px-6">
-            <div className="text-center mb-16">
-              <SectionLabel>Testimonials</SectionLabel>
-              <h2 className="text-4xl font-bold font-serif">See What Other People Have To Say About Tanuja</h2>
-            </div>
-            <div className="grid gap-10">
-              {[
-                {
-                  text: "Working with Tanuja has been one of the most rewarding experiences of my professional journey. From the very first conversation, she brought warmth, clarity, and genuine care into the coaching process. What stood out most to me was her ability to listen deeply and ask the kind of questions that made me pause, reflect, and discover insights I hadn’t considered before. Tanuja has a gift for creating a safe space where you feel both supported and challenged. She doesn’t just guide you, she walks alongside you, celebrating small wins and encouraging you through the tougher moments. Her coaching helped me not only achieve my goals but also gain confidence in my own decision-making and leadership style.",
-                  author: "Divya AS - Associate Director"
-                },
-                {
-                  text: "Thank you for your time and support in this journey. It was very helpful for me as I realized lot of hidden strengths within me and gained more confidence to tackle things. You are very organised, caring and a matured coach. You understand the depth of the problem and give the right solutions to the problems. Your knowledge and talent will help lot of people and I would definitely recommend this course to my contacts.",
-                  author: "Vrinda - Team Lead"
-                },
-                {
-                  text: "I had the opportunity to work with Tanuja for a personalized consultation, and I’m so glad I did. From the start, she took the time to understand what I needed and offered tips and tricks that were customized just for me. Clearly, she knows exactly what she’s doing, and she made everything so easy to grasp. During our practical activities, I had several 'aha moments,' which were incredibly valuable. I’d definitely recommend Tanuja to anyone looking to improve their Self Image. She’s dedicated, knowledgeable, and really helps you build systems that work for you. Working with her has been a game-changer for me.",
-                  author: "Pragathe Murugan - Founder and CEO"
-                }
-              ].map((t, i) => (
-                <div key={i} className="bg-white p-10 shadow-sm border border-gray-100 relative group">
-                  {/* Decorative Quote Icon */}
-                  <span className="absolute top-4 left-4 text-7xl text-[#FF7F2E]/10 font-serif leading-none">“</span>
-                  <p className="text-lg text-gray-700 mb-6 italic leading-relaxed font-sans relative z-10">
-                    {t.text}
-                  </p>
-                  <p className="font-bold text-[#FF7F2E] uppercase tracking-widest text-sm not-italic">
-                    — {t.author}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+      {/* 6. Mid-page CTA */}
+      <section className="py-16 bg-white border-b border-gray-100 text-center">
+        <div className="max-w-3xl mx-auto px-6">
+          <h3 className="text-2xl md:text-3xl font-bold font-serif mb-6 text-gray-800">Don't wait to become the leader you're meant to be.</h3>
+          <CTAButton href={data.checkoutUrl} size="large" price={data.price} currency={data.currency}>
+            Claim Your Spot Now
+          </CTAButton>
+        </div>
+      </section>
 
-      {/* About The Host */}
-      <section className="py-16 md:py-24 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-        <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Profile%20Pic.avif" alt="Tanuja" className="w-full h-auto grayscale hover:grayscale-0 transition-all duration-500 shadow-xl" />
-        <div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 font-serif">{data.hostName}</h2>
-          <div className="mb-6 md:mb-8">
-            <p className="text-lg md:text-xl font-bold text-[#FF7F2E] mb-1">Executive Presence Coach for Women Leaders</p>
-            <p className="text-base md:text-lg text-gray-500 font-sans">Helping Women Leaders build Confidence, Visibility & Career Growth</p>
-          </div>
-          <div className="space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed font-sans text-gray-700">
-            <p>
-              Certified Life Coach – Life By Design (Puja Puneet)<br />
-              Certified Image Consultant – Image Consulting Business Institute (ICBI)<br />
-              Certified in Soft Skills & Train the Trainer – Scottish Qualifications Authority (SQA) & NABET
-            </p>
-            <p>
-              Tanuja works with women managers and aspiring leaders who are technically strong yet often overlooked in high-stakes conversations and growth opportunities. Through a structured approach focused on executive presence, leadership communication, and self-image, she enables women to command respect, articulate value, and position themselves for advancement.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4 md:gap-8 pt-8 md:pt-10 border-t border-gray-100 mt-8">
-            <div>
-              <p className="text-3xl md:text-4xl font-bold text-[#FF7F2E] mb-1">13 Years</p>
-              <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-gray-400">Corporate Experience</p>
-            </div>
-            <div>
-              <p className="text-3xl md:text-4xl font-bold text-[#FF7F2E] mb-1">8 Years</p>
-              <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-gray-400">Coaching Experience</p>
-            </div>
+      {/* 7. Testimonials */}
+      <section className="py-16 md:py-24 bg-gray-50 text-center">
+        <div className="max-w-5xl mx-auto px-6">
+          <SectionLabel>Testimonials</SectionLabel>
+          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-12 md:mb-16">See What Other People Have To Say About Tanuja</h2>
+          <div className="grid gap-6 text-left">
+            {[
+              { author: "Divya AS - Associate Director", text: "Working with Tanuja has been one of the most rewarding experiences of my professional journey. From the very first conversation, she brought warmth, clarity, and genuine care into the coaching process. What stood out most to me was her ability to listen deeply and ask the kind of questions that made me pause, reflect, and discover insights I hadn’t considered before. Tanuja has a gift for creating a safe space where you feel both supported and challenged. She doesn’t just guide you, she walks alongside you, celebrating small wins and encouraging you through the tougher moments. Her coaching helped me not only achieve my goals but also gain confidence in my own decision-making and leadership style." },
+              { author: "Vrinda - Team Lead", text: "Thank you for your time and support in this journey. It was very helpful for me as I realized lot of hidden strengths within me and gained more confidence to tackle things. You are very organised, caring and a matured coach. You understand the depth of the problem and give the right solutions to the problems. Your knowledge and talent will help lot of people and I would definitely recommend this course to my contacts." },
+              { author: "Pragathe Murugan - Founder and CEO", text: "I had the opportunity to work with Tanuja for a personalized consultation, and I’m so glad I did. From the start, she took the time to understand what I needed and offered tips and tricks that were customized just for me. Clearly, she knows exactly what she’s doing, and she made everything so easy to grasp. During our practical activities, I had several 'aha moments,' which were incredibly valuable. I’d definitely recommend Tanuja to anyone looking to improve their Self Image. She’s dedicated, knowledgeable, and really helps you build systems that work for you. Working with her has been a game-changer for me." }
+            ].map((t, i) => (
+              <div key={i} className="bg-white p-8 md:p-10 shadow-sm border border-gray-100 italic relative">
+                <span className="absolute top-4 left-4 text-7xl text-[#FF7F2E]/10 font-serif leading-none">“</span>
+                <p className="text-base md:text-lg text-gray-700 mb-4 leading-relaxed relative z-10">"{t.text}"</p>
+                <p className="font-bold text-[#FF7F2E] not-italic text-sm md:text-base">— {t.author}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* 8. FAQ */}
       <section className="py-16 md:py-24 bg-white px-6 border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
-          <SectionLabel>FAQ</SectionLabel>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-8 bg-[#FF7F2E]" />
+            <span className="text-[16px] md:text-[20px] uppercase tracking-[0.25em] font-semibold text-[#FF7F2E]">FAQ</span>
+            <div className="h-px w-8 bg-[#FF7F2E]" />
+          </div>
           <Accordion type="single" collapsible className="w-full">
             {data.faqs.map((faq, i) => (
               <AccordionItem key={i} value={`faq-${i}`} className="border-[#FF7F2E]/20">
-                <AccordionTrigger className="text-left font-bold text-lg md:text-xl py-6 md:py-8 font-sans hover:text-[#FF7F2E] transition-colors leading-snug">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-lg md:text-xl text-gray-600 leading-relaxed pb-6 md:pb-8 font-sans">
-                  {faq.answer}
-                </AccordionContent>
+                <AccordionTrigger className="text-left font-bold text-lg md:text-xl py-6 md:py-8 font-sans hover:text-[#FF7F2E] transition-colors leading-snug">{faq.question}</AccordionTrigger>
+                <AccordionContent className="text-lg md:text-xl text-gray-600 leading-relaxed pb-6 md:pb-8 font-sans">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
       </section>
 
-      {/* Final CTA Section */}
+      {/* 9. Final CTA */}
       <section className="py-16 md:py-24 bg-[#FFF5F0] border-y border-[#FF7F2E]/10 text-center">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold font-serif mb-4 md:mb-6">Ready to Elevate Your Executive Presence?</h2>
           <p className="text-lg md:text-xl text-gray-600 mb-8 md:mb-10">Limited seats available for this exclusive live session. Secure your spot today.</p>
-          <CTAButton href={data.checkoutUrl} size="large">
-            Reserve My Seat Now · {data.currency}{data.price}
+          <CTAButton href={data.checkoutUrl} size="large" price={data.price} currency={data.currency}>
+            Reserve My Seat Now
           </CTAButton>
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="bg-white py-10 md:py-12 text-center border-t border-gray-50">
-        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-300 mb-6 px-4">
-          © 2026 {data.programName} · All Rights Reserved
-        </p>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-300 mb-6 px-4">© 2026 {data.programName} · All Rights Reserved</p>
         <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-[9px] md:text-[10px] uppercase tracking-widest font-bold text-gray-400 px-4">
-          <a href="#" className="hover:text-[#FF7F2E] transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-[#FF7F2E] transition-colors">Terms & Conditions</a>
-          <a href="#" className="hover:text-[#FF7F2E] transition-colors">Refunds and Cancellation</a>
+          <a href="https://tanujadevang.com/privacy-policy" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF7F2E]">Privacy Policy</a>
+          <a href="https://tanujadevang.com/terms-and-conditions" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF7F2E]">Terms & Conditions</a>
+          <a href="https://tanujadevang.com/cancellation-refund" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF7F2E]">Refunds and Cancellation</a>
         </div>
       </footer>
     </main>
