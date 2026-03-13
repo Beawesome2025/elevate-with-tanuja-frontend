@@ -31,7 +31,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Updated CTAButton to handle the small suffix text
+// Updated CTAButton to fix "+TAXES" alignment and casing
 function CTAButton({
   href,
   children,
@@ -46,17 +46,19 @@ function CTAButton({
   size?: "default" | "large"
 }) {
   return (
-    <a href={href} className={`inline-flex items-center justify-center gap-2 font-bold transition-all duration-300 bg-[#FF7F2E] hover:bg-[#E66A1F] text-white rounded-none uppercase tracking-widest shadow-lg ${size === "large" ? "px-10 py-4 text-base md:text-lg" : "px-8 py-4 text-sm"}`}>
-      <span className="flex items-baseline gap-1">
-        {children}
+    <a href={href} className={`inline-flex items-center justify-center gap-2 font-bold transition-all duration-300 bg-[#FF7F2E] hover:bg-[#E66A1F] text-white rounded-none uppercase tracking-widest shadow-lg ${size === "large" ? "px-8 py-4 md:px-10 md:py-4 text-base md:text-lg" : "px-6 py-4 text-sm"}`}>
+      <span className="flex items-baseline gap-1.5 flex-wrap justify-center">
+        <span>{children}</span>
         {price !== undefined && (
-          <>
-            <span> · {currency}{price}</span>
-            <span className="text-[10px] md:text-[12px] lowercase font-normal opacity-90 tracking-normal">+taxes</span>
-          </>
+          <span className="flex items-baseline gap-1">
+            <span>· {currency}{price}</span>
+            <span className="text-[9px] md:text-[11px] uppercase font-bold opacity-80 leading-none">
+              +TAXES
+            </span>
+          </span>
         )}
       </span>
-      <ArrowRight size={size === "large" ? 22 : 16} />
+      <ArrowRight size={size === "large" ? 22 : 16} className="shrink-0" />
     </a>
   );
 }
@@ -118,7 +120,23 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
         </div>
       </section>
 
-      {/* 2. About The Host (Pushed Up) */}
+      {/* 2. Recognize Yourself Section */}
+      <section className="py-16 md:py-24 bg-white border-y border-gray-100">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <SectionLabel>Recognize yourself?</SectionLabel>
+          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-12 md:mb-16">This Masterclass is for you if...</h2>
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8 text-left">
+            {data.painPoints.map((point, i) => (
+              <div key={i} className="flex gap-4 md:gap-6 p-6 md:p-8 bg-[#FFF5F0] border-l-4 border-[#FF7F2E] items-start">
+                <Star size={20} className="text-[#FF7F2E] fill-[#FF7F2E] mt-1 shrink-0" />
+                <p className="text-base md:text-lg font-medium leading-relaxed font-sans">{point}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. About The Host (Pushed to 3rd place) */}
       <section className="py-16 md:py-24 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
         <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Profile%20Pic.avif" alt="Host" className="w-full h-auto shadow-xl" />
         <div>
@@ -138,30 +156,14 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
         </div>
       </section>
 
-      {/* 3. Recognize Yourself Section */}
-      <section className="py-16 md:py-24 bg-white border-y border-gray-100">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <SectionLabel>Recognize yourself?</SectionLabel>
-          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-12 md:mb-16">This Masterclass is for you if...</h2>
-          <div className="grid md:grid-cols-2 gap-6 md:gap-8 text-left">
-            {data.painPoints.map((point, i) => (
-              <div key={i} className="flex gap-4 md:gap-6 p-6 md:p-8 bg-[#FFF5F0] border-l-4 border-[#FF7F2E] items-start">
-                <Star size={20} className="text-[#FF7F2E] fill-[#FF7F2E] mt-1 shrink-0" />
-                <p className="text-base md:text-lg font-medium leading-relaxed font-sans">{point}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* 4. Offline Seminar Glimpses */}
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <SectionLabel>Our Community</SectionLabel>
           <h2 className="text-3xl md:text-4xl font-bold font-serif mb-12 md:mb-16">Glimpses from our Offline Seminar</h2>
           <div className="grid md:grid-cols-2 gap-6 md:gap-12">
-            <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Seminar-pic-1.avif" alt="S1" className="shadow-lg" />
-            <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Seminar-Pic-2.avif" alt="S2" className="shadow-lg" />
+            <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Seminar-pic-1.avif" alt="S1" className="shadow-lg w-full" />
+            <img src="https://pub-f375394ca02f40d18bb1daf616854eef.r2.dev/Seminar-Pic-2.avif" alt="S2" className="shadow-lg w-full" />
           </div>
         </div>
       </section>
@@ -183,8 +185,8 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
       </section>
 
       {/* 6. Mid-page CTA */}
-      <section className="py-16 bg-white border-b border-gray-100 text-center">
-        <div className="max-w-3xl mx-auto px-6">
+      <section className="py-16 bg-white border-b border-gray-100 text-center px-6">
+        <div className="max-w-3xl mx-auto">
           <h3 className="text-2xl md:text-3xl font-bold font-serif mb-6 text-gray-800">Don't wait to become the leader you're meant to be.</h3>
           <CTAButton href={data.checkoutUrl} size="large" price={data.price} currency={data.currency}>
             Claim Your Spot Now
@@ -233,8 +235,8 @@ export default function MasterclassLandingPage({ initialData }: { initialData: M
       </section>
 
       {/* 9. Final CTA */}
-      <section className="py-16 md:py-24 bg-[#FFF5F0] border-y border-[#FF7F2E]/10 text-center">
-        <div className="max-w-3xl mx-auto px-6">
+      <section className="py-16 md:py-24 bg-[#FFF5F0] border-y border-[#FF7F2E]/10 text-center px-6">
+        <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold font-serif mb-4 md:mb-6">Ready to Elevate Your Executive Presence?</h2>
           <p className="text-lg md:text-xl text-gray-600 mb-8 md:mb-10">Limited seats available for this exclusive live session. Secure your spot today.</p>
           <CTAButton href={data.checkoutUrl} size="large" price={data.price} currency={data.currency}>
